@@ -7,9 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="bond-demo-v6" />
+        <module name="cdm-multiproduct-example" />
         <module name="basic-bond-example" />
         <module name="multi-product-demo-v6" />
+        <module name="bond-demo-v6" />
       </profile>
     </annotationProcessing>
   </component>

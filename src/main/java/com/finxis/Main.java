@@ -15,9 +15,8 @@ import cdm.base.staticdata.identifier.AssignedIdentifier;
 import cdm.base.staticdata.identifier.TradeIdentifierTypeEnum;
 import cdm.base.staticdata.party.*;
 import cdm.base.staticdata.party.metafields.ReferenceWithMetaParty;
-import cdm.event.common.ExecutionDetails;
-import cdm.event.common.Trade;
-import cdm.event.common.TradeIdentifier;
+import cdm.event.common.*;
+import cdm.event.common.functions.Create_Execution;
 import cdm.observable.asset.*;
 import cdm.observable.asset.metafields.FieldWithMetaObservable;
 import cdm.observable.asset.metafields.FieldWithMetaPriceSchedule;
@@ -35,12 +34,24 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finxis.models.*;
 import com.finxis.util.FileWriter;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.regnosys.rosetta.common.serialisation.RosettaObjectMapper;
 import com.rosetta.model.lib.meta.Reference;
 import com.rosetta.model.lib.records.Date;
 import com.rosetta.model.metafields.FieldWithMetaDate;
 import com.rosetta.model.metafields.FieldWithMetaString;
 import com.rosetta.model.metafields.MetaFields;
+import org.finos.cdm.CdmRuntimeModule;
+
+import cdm.event.common.*;
+import cdm.event.common.functions.*;
+import cdm.event.common.metafields.ReferenceWithMetaCollateralPortfolio;
+import cdm.event.common.metafields.ReferenceWithMetaTrade;
+import cdm.event.common.metafields.ReferenceWithMetaTradeState;
+import cdm.event.qualification.functions.*;
+import cdm.event.workflow.*;
+import cdm.event.workflow.functions.Create_WorkflowStep;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -109,7 +120,7 @@ public class Main {
         FXOptionModel fxOptionModel = main.setFXOptionData();
         product = main.createFXOptionProduct(fxOptionModel);
         TradeModel fxOptionTradeModel = main.setFXOptionTradeData();
-        trade = main.createFXCashTrade(product, fxOptionTradeModel);
+        trade = main.createFXOptionTrade(product, fxOptionTradeModel);
 
         tradeJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(trade);
         System.out.println(tradeJson);
@@ -119,12 +130,14 @@ public class Main {
         tradeObj = new Trade.TradeBuilderImpl();
         newTrade = rosettaObjectMapper.readValue(tradeJson, tradeObj.getClass());
 
+
+
         //FX Option
 
         IrsOtcModel irsOtcModel = main.setIrsOctData();
         product = main.createIrsOtcProduct(irsOtcModel);
         TradeModel irsOtcTradeModel = main.setIrsOtcTradeData();
-        trade = main.createFXCashTrade(product, irsOtcTradeModel);
+        trade = main.createIrsOtcTrade(product, irsOtcTradeModel);
 
         tradeJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(trade);
         System.out.println(tradeJson);
@@ -185,6 +198,7 @@ public class Main {
         Product product = Product.builder()
                 .setNonTransferableProduct(NonTransferableProduct.builder()
                         .setEconomicTerms(EconomicTerms.builder()
+                                .setEffectiveDate(createAdjustableDate(irsOtcModel.fixedRateLegList.get(0).effectiveDate))
                                 .setPayout(List.of(Payout.builder()
                                                 .setInterestRatePayout(InterestRatePayout.builder()
                                                         .setPriceQuantity(ResolvablePriceQuantity.builder()
@@ -298,7 +312,7 @@ public class Main {
 
     }
 
-    public Trade createIrsOtcTrade(Product irsOtcProduct, TradeModel irsOctTradeModel) {
+    public Trade createIrsOtcTrade(Product irsOtcProduct, TradeModel irsOctTradeModel) throws IOException {
         AdjustableOrRelativeDate settlementDate = this.createAdjustableDate(irsOctTradeModel.settlementDate);
         Date tradeDate = this.createDate(irsOctTradeModel.tradeDate);
 
@@ -385,6 +399,19 @@ public class Main {
 
                 .build();
 
+        ExecutionInstruction executionInstruction = ExecutionInstruction.builder()
+                .setProduct(irsOtcProduct.getNonTransferableProduct())
+                .addPriceQuantity(trade.getTradeLot().get(0).getPriceQuantity())
+                .addCounterparty(trade.getCounterparty())
+                .addParties(trade.getParty())
+                .addPartyRoles(trade.getPartyRole())
+                .setExecutionDetails(trade.getExecutionDetails())
+                .setTradeDate(trade.getTradeDate())
+                .addTradeIdentifier(trade.getTradeIdentifier())
+                .build();
+
+        runExecutionBusinessEvent(executionInstruction);
+
         return trade;
 
     }
@@ -453,7 +480,7 @@ public class Main {
 
     }
 
-    public Trade createFXOptionTrade(Product fxOptionProduct, TradeModel fxOptionTradeModel) {
+    public Trade createFXOptionTrade(Product fxOptionProduct, TradeModel fxOptionTradeModel) throws IOException {
         AdjustableOrRelativeDate settlementDate = this.createAdjustableDate(fxOptionTradeModel.settlementDate);
         Date tradeDate = this.createDate(fxOptionTradeModel.tradeDate);
 
@@ -540,6 +567,20 @@ public class Main {
 
                 .build();
 
+        ExecutionInstruction executionInstruction = ExecutionInstruction.builder()
+                .setProduct(fxOptionProduct.getNonTransferableProduct())
+                .addPriceQuantity(trade.getTradeLot().get(0).getPriceQuantity())
+                .addCounterparty(trade.getCounterparty())
+                .addParties(trade.getParty())
+                .addPartyRoles(trade.getPartyRole())
+                .setExecutionDetails(trade.getExecutionDetails())
+                .setTradeDate(trade.getTradeDate())
+                .addTradeIdentifier(trade.getTradeIdentifier())
+                .build();
+
+        runExecutionBusinessEvent(executionInstruction);
+
+
         return trade;
     }
 
@@ -589,13 +630,14 @@ public class Main {
                                             .setPayerReceiver(PayerReceiver.builder()
                                                     .setPayer(CounterpartyRoleEnum.PARTY_2)
                                                     .setReceiver(CounterpartyRoleEnum.PARTY_1)))))
+                            .setEffectiveDate(settlementDate)
                             .setTerminationDate(settlementDate)))
                             .build();
 
        return product;
     }
 
-    public Trade createFXCashTrade(Product fxCashProduct, TradeModel fxTradeModel){
+    public Trade createFXCashTrade(Product fxCashProduct, TradeModel fxTradeModel) throws IOException {
 
         AdjustableOrRelativeDate settlementDate = this.createAdjustableDate(fxTradeModel.settlementDate);
         Date tradeDate = this.createDate(fxTradeModel.tradeDate);
@@ -682,6 +724,19 @@ public class Main {
                                                                                 .setIdentifierValue(fxTradeModel.priceCurrency)))))))))))
 
                 .build();
+
+        ExecutionInstruction executionInstruction = ExecutionInstruction.builder()
+                .setProduct(fxCashProduct.getNonTransferableProduct())
+                .addPriceQuantity(trade.getTradeLot().get(0).getPriceQuantity())
+                .addCounterparty(trade.getCounterparty())
+                .addParties(trade.getParty())
+                .addPartyRoles(trade.getPartyRole())
+                .setExecutionDetails(trade.getExecutionDetails())
+                .setTradeDate(trade.getTradeDate())
+                .addTradeIdentifier(trade.getTradeIdentifier())
+                .build();
+
+        runExecutionBusinessEvent(executionInstruction);
 
     return trade;
 
@@ -1109,6 +1164,49 @@ public Trade createTrade(Product bond, BondModel bondModel){
 
 
         return date;
+    }
+
+
+    public void runExecutionBusinessEvent(ExecutionInstruction executionInstruction) throws IOException {
+
+        Injector injector = Guice.createInjector(new CdmRuntimeModule());
+        FileWriter fileWriter = new FileWriter();
+
+        //Create a primitive execution instruction
+        PrimitiveInstruction primitiveInstruction = PrimitiveInstruction.builder()
+                .setExecution(executionInstruction);
+
+        Date effectiveDate = executionInstruction.getProduct().getEconomicTerms().getEffectiveDate().getAdjustableDate().getAdjustedDate().getValue();
+        Date eventDate = executionInstruction.getProduct().getEconomicTerms().getEffectiveDate().getAdjustableDate().getAdjustedDate().getValue();
+
+        Create_Execution.Create_ExecutionDefault repoExecution = new Create_Execution.Create_ExecutionDefault();
+        injector.injectMembers(repoExecution);
+        TradeState tradeState = repoExecution.evaluate(executionInstruction);
+
+        //Create an instruction from primitive. Before state is null
+        Instruction instruction = Instruction.builder()
+                .setPrimitiveInstruction(primitiveInstruction)
+                .setBefore(null)
+                .build();
+
+        List<Instruction> instructionList = List.of(instruction);
+
+        DateTimeFormatter eventDateFormat = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String eventDateTime = localDateTime.format(eventDateFormat);
+
+        BusinessEvent betest = BusinessEvent.builder()
+                .addInstruction(instruction)
+                .build();
+
+        Create_BusinessEvent be = new Create_BusinessEvent.Create_BusinessEventDefault();
+        injector.injectMembers(be);
+        BusinessEvent businessEvent = be.evaluate(instructionList, null, eventDate, effectiveDate);
+
+
+        String businessEventJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(businessEvent);
+        System.out.println(businessEventJson);
+        fileWriter.writeEventToFile("execution-event", eventDateTime, businessEventJson);
     }
 
 }
