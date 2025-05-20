@@ -1,0 +1,11 @@
+com\finxis\models\FXCashModel.class
+com\finxis\models\FixedRateLeg.class
+com\finxis\models\FloatingRateLeg.class
+com\finxis\Main.class
+com\finxis\models\BondModel.class
+com\finxis\models\FXOptionModel.class
+com\finxis\models\TradeModel.class
+com\finxis\util\FileWriter.class
+com\finxis\models\BondFutureModel.class
+com\finxis\models\CdsOtcModel.class
+com\finxis\models\IrsOtcModel.class
