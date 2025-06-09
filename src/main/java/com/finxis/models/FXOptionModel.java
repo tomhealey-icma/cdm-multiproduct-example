@@ -93,6 +93,11 @@ public class FXOptionModel {
         this.volitility = volitility;
     }
 
+
+    public String currency1;
+    public String currency2;
+    public String instrumentName;
+
     public String style;
     public String callPut;
     public String expirationDate;
@@ -102,5 +107,6 @@ public class FXOptionModel {
     public String notionalCurrency;
     public String modelType;
     public String volitility;
+
 
 }
