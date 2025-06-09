@@ -47,6 +47,9 @@ public class BuildProduct {
 
     Product product = Product.builder()
             .setNonTransferableProduct(NonTransferableProduct.builder()
+                    .addIdentifier(ProductIdentifier.builder()
+                            .setIdentifier(FieldWithMetaString.builder()
+                                    .setValue(irsOtcModel.instrumentName)))
                     .setEconomicTerms(EconomicTerms.builder()
                             .setEffectiveDate(cdmDates.createAdjustableDate(irsOtcModel.fixedRateLegList.get(0).effectiveDate))
                             .setPayout(List.of(Payout.builder()

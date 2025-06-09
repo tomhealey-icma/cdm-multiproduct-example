@@ -58,6 +58,8 @@ public class IrsOtcModel {
     public String dv01;
     public String accrued;
     public String premium;
+
+    public String instrumentName;
 }
 
 

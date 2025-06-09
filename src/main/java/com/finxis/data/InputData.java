@@ -31,6 +31,9 @@ public class InputData {
     irs.fixedRateLegList = List.of(l1);
     irs.floatingRateLegList = List.of(l2);
 
+    irs.instrumentName = "IRS USD_SOFR_OIS_COMPOUND 2030-05-20";
+
+
     return irs;
   }
 
@@ -45,6 +48,7 @@ public class InputData {
     tradeModel.counterparty2Id = "SellerId";
     tradeModel.settlementDate = "2025-05-20T00:00:00.000+00:00";
     tradeModel.tradeDate = "2025-05-18T00:00:00.000+00:00";
+
 
     return tradeModel;
 
