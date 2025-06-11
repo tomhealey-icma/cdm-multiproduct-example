@@ -40,7 +40,7 @@ import java.util.List;
 
 public class CreateTrade {
 
-  public Trade createIrsOtcTrade(Product irsOtcProduct, TradeModel irsOctTradeModel) throws IOException {
+  public ExecutionInstruction createIrsOtcTrade(Product irsOtcProduct, TradeModel irsOctTradeModel) throws IOException {
     CdmDates cdmDates = new CdmDates();
     CdmBusinessEvent cdmBusinessEvent = new CdmBusinessEvent();
 
@@ -143,11 +143,11 @@ public class CreateTrade {
 
     cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
-    return trade;
+    return executionInstruction;
 
   }
 
-  public Trade createFXOptionTrade(Product fxOptionProduct, TradeModel fxOptionTradeModel) throws IOException {
+  public  ExecutionInstruction createFXOptionTrade(Product fxOptionProduct, TradeModel fxOptionTradeModel) throws IOException {
 
     CdmDates cdmDates = new CdmDates();
     CdmBusinessEvent cdmBusinessEvent = new CdmBusinessEvent();
@@ -252,10 +252,10 @@ public class CreateTrade {
     cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
 
-    return trade;
+    return executionInstruction;
   }
 
-  public Trade createFXCashTrade(Product fxCashProduct, TradeModel fxTradeModel) throws IOException {
+  public  ExecutionInstruction createFXCashTrade(Product fxCashProduct, TradeModel fxTradeModel) throws IOException {
 
     CdmDates cdmDates = new CdmDates();
     CdmBusinessEvent cdmBusinessEvent = new CdmBusinessEvent();
@@ -359,12 +359,12 @@ public class CreateTrade {
 
     cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
-    return trade;
+    return executionInstruction;
 
 
   }
 
-  public Trade createBondTrade(Product bond, BondModel bondModel) throws IOException {
+  public  ExecutionInstruction createBondTrade(Product bond, BondModel bondModel) throws IOException {
 
     String tradeDateTime = "2025-02-27T15:38:16.000+00:00";
     String tradeTime = "153816";
@@ -501,10 +501,10 @@ public class CreateTrade {
 
     cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
-    return trade;
+    return executionInstruction;
   }
 
-  public Trade createFutureTrade(Product bondFuture, BondFutureModel bondFutureModel) throws IOException {
+  public  ExecutionInstruction createFutureTrade(Product bondFuture, BondFutureModel bondFutureModel) throws IOException {
 
     CdmDates cdmDates = new CdmDates();
     CdmBusinessEvent cdmBusinessEvent = new CdmBusinessEvent();
@@ -616,6 +616,6 @@ public class CreateTrade {
 
     cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
-    return trade;
+    return executionInstruction;
   }
 }

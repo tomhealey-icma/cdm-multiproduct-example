@@ -12,6 +12,7 @@ import cdm.base.math.metafields.ReferenceWithMetaNonNegativeQuantitySchedule;
 import cdm.base.staticdata.asset.common.*;
 import cdm.base.staticdata.asset.rates.FloatingRateIndexEnum;
 import cdm.base.staticdata.identifier.AssignedIdentifier;
+import cdm.base.staticdata.identifier.Identifier;
 import cdm.base.staticdata.identifier.TradeIdentifierTypeEnum;
 import cdm.base.staticdata.party.*;
 import cdm.base.staticdata.party.metafields.ReferenceWithMetaParty;
@@ -26,17 +27,21 @@ import cdm.product.common.schedule.CalculationPeriodDates;
 import cdm.product.common.schedule.PayRelativeToEnum;
 import cdm.product.common.schedule.PaymentDates;
 import cdm.product.common.schedule.RateSchedule;
+import cdm.product.common.settlement.AssetFlowBase;
 import cdm.product.common.settlement.ResolvablePriceQuantity;
 import cdm.product.common.settlement.SettlementDate;
 import cdm.product.common.settlement.SettlementTerms;
 import cdm.product.template.*;
+import cdm.product.template.metafields.ReferenceWithMetaPayout;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finxis.data.InputData;
 import com.finxis.models.*;
 import com.finxis.product.BuildProduct;
 import com.finxis.trade.CreateTrade;
+import com.finxis.util.CdmDates;
 import com.finxis.util.FileWriter;
+import com.finxis.workflows.ExecutionWorkflow;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.regnosys.rosetta.common.serialisation.RosettaObjectMapper;
@@ -77,48 +82,133 @@ public class Main {
         DateTimeFormatter eventDateFormat = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
         LocalDateTime localDateTime = LocalDateTime.now();
         String eventDateTime = localDateTime.format(eventDateFormat);
+        CdmBusinessEvent cdmBusinessEvent = new CdmBusinessEvent();
+        BusinessEvent businessEvent = BusinessEvent.builder().build();
 
 
         //European Corporate Bond Example
         BondModel bondModel = inputData.setBondData();
         Product product = buildProduct.createBondProduct(bondModel);
-        Trade trade = createTrade.createBondTrade(product, bondModel);
+        ExecutionInstruction executionInstruction = createTrade.createBondTrade(product, bondModel);
+        cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
-        String tradeJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(trade);
-        System.out.println(tradeJson);
-        fileWriter.writeEventToFile("eu-corporate-bond-product", eventDateTime, tradeJson);
-
-
-        ObjectMapper rosettaObjectMapper = RosettaObjectMapper.getNewRosettaObjectMapper();
-        Trade tradeObj = new Trade.TradeBuilderImpl();
-        Trade newTrade = rosettaObjectMapper.readValue(tradeJson, tradeObj.getClass());
 
         //US Treasury Example
+        //Create product and trade
         BondModel usTreasuryModel = inputData.setUSTreasuryBondData();
         product = buildProduct.createBondProduct(usTreasuryModel);
-        trade = createTrade.createBondTrade(product, usTreasuryModel);
+        executionInstruction = createTrade.createBondTrade(product, usTreasuryModel);
+        businessEvent = cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
-        tradeJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(trade);
-        System.out.println(tradeJson);
-        fileWriter.writeEventToFile("us-treasury-product", eventDateTime, tradeJson);
+        Identifier workflowIdentifier = Identifier.builder()
+                .setAssignedIdentifier(List.of(AssignedIdentifier.builder()
+                        .setIdentifierValue("1000")))
+                .build();
+        WorkflowStep executionWorkflowStep = WorkflowStep.builder()
+                                .setEventIdentifier(List.of(workflowIdentifier))
+                                .setWorkflowState(WorkflowState.builder()
+                                        .setWorkflowStatus(WorkflowStatusEnum.ACCEPTED))
+                                        .setAction(ActionEnum.NEW)
+                                        .setBusinessEvent(businessEvent)
+                .build();
 
 
-        rosettaObjectMapper = RosettaObjectMapper.getNewRosettaObjectMapper();
-        tradeObj = new Trade.TradeBuilderImpl();
-        newTrade = rosettaObjectMapper.readValue(tradeJson, tradeObj.getClass());
+
+        Workflow workflow = Workflow.builder()
+                .setSteps(List.of(executionWorkflowStep))
+                .build();
+
+        String workFlowJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(workflow);
+        System.out.println(workFlowJson);
+        fileWriter.writeEventToFile(usTreasuryModel.isin + "-execution-workflow", eventDateTime, workFlowJson);
+
+
+        //Correction
+        workflowIdentifier = Identifier.builder()
+                .setAssignedIdentifier(List.of(AssignedIdentifier.builder()
+                        .setIdentifierValue("1001")))
+
+                .build();
+
+        QuantityChangeInstruction quantityChangeInstruction = QuantityChangeInstruction.builder()
+                .setDirection(QuantityChangeDirectionEnum.REPLACE)
+                .setChange(List.of(PriceQuantity.builder()
+                                .setQuantity(List.of(FieldWithMetaNonNegativeQuantitySchedule.builder()
+                                        .setValue(NonNegativeQuantitySchedule.builder()
+                                                .setValue(BigDecimal.valueOf(Double.parseDouble("10000000.00")))
+                                                .setUnit(UnitType.builder()
+                                                        .setCurrencyValue(bondModel.currency)))))))
+
+                .build();
+
+
+        businessEvent = cdmBusinessEvent.runChangeQuantityBusinessEvent(businessEvent.getAfter().get(0), quantityChangeInstruction);
+
+        WorkflowStep correctWorkFlowStep = WorkflowStep.builder()
+                .setEventIdentifier(List.of(workflowIdentifier))
+                .setWorkflowState(WorkflowState.builder()
+                        .setWorkflowStatus(WorkflowStatusEnum.ACCEPTED))
+                .setAction(ActionEnum.CORRECT)
+                .setBusinessEvent(businessEvent)
+                .setLineage(Lineage.builder()
+                        .setEventReferenceValue(List.of(executionWorkflowStep))
+                        .build())
+                .build();
+
+
+        workflow = Workflow.builder()
+                .setSteps(List.of(executionWorkflowStep,correctWorkFlowStep))
+                .build();
+
+        workFlowJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(workflow);
+        System.out.println(workFlowJson);
+        fileWriter.writeEventToFile(usTreasuryModel.isin + "-correction-workflow", eventDateTime, workFlowJson);
+
+
+        //Transfer Step
+        workflowIdentifier = Identifier.builder()
+                .setAssignedIdentifier(List.of(AssignedIdentifier.builder()
+                        .setIdentifierValue("1002")))
+
+                .build();
+        TransferInstruction transferInstruction = TransferInstruction.builder()
+                .setTransferState(List.of(TransferState.builder()
+                                .setTransferStatus(TransferStatusEnum.SETTLED)
+                                .setTransfer(Transfer.builder()
+                                        .setSettlementOrigin(ReferenceWithMetaPayout.builder()
+                                                .setValue(product.getNonTransferableProduct().getEconomicTerms().getPayout()
+                                                        .get(0).getSettlementPayout().getUnderlier().getProduct().getTransferableProduct()
+                                                        .getEconomicTerms().getPayout().get(0))))))
+
+
+                        .build();
+
+        businessEvent = cdmBusinessEvent.runChangeQuantityBusinessEvent(businessEvent.getAfter().get(0), quantityChangeInstruction);
+
+        WorkflowStep transferWorkFlowStep = WorkflowStep.builder()
+                .setEventIdentifier(List.of(workflowIdentifier))
+                .setWorkflowState(WorkflowState.builder()
+                        .setWorkflowStatus(WorkflowStatusEnum.ACCEPTED))
+                .setAction(ActionEnum.NEW)
+                .setBusinessEvent(businessEvent)
+                .build();
+
+        workflow = Workflow.builder()
+                .setSteps(List.of(executionWorkflowStep,correctWorkFlowStep, transferWorkFlowStep))
+                .build();
+
+        workFlowJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(workflow);
+        System.out.println(workFlowJson);
+        fileWriter.writeEventToFile(usTreasuryModel.isin + "-transfer-workflow", eventDateTime, workFlowJson);
+
+
 
         //Bond Future
         BondFutureModel bondFutureModel = inputData.setBondFutureData();
         product = buildProduct.createBondFutureProduct(bondFutureModel);
-        trade = createTrade.createFutureTrade(product, bondFutureModel);
+        executionInstruction = createTrade.createFutureTrade(product, bondFutureModel);
+        businessEvent = cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
-        tradeJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(trade);
-        System.out.println(tradeJson);
-        fileWriter.writeEventToFile("bond-future-product", eventDateTime, tradeJson);
-
-        rosettaObjectMapper = RosettaObjectMapper.getNewRosettaObjectMapper();
-        tradeObj = new Trade.TradeBuilderImpl();
-        newTrade = rosettaObjectMapper.readValue(tradeJson, tradeObj.getClass());
 
 
         //FX Cash
@@ -126,30 +216,17 @@ public class Main {
         FXCashModel fxCashModel = inputData.setFXCashData();
         product = buildProduct.createFXCashProduct(fxCashModel);
         TradeModel fxTradeModel = inputData.setFXCashTradeData();
-        trade = createTrade.createFXCashTrade(product, fxTradeModel);
+        executionInstruction = createTrade.createFXCashTrade(product, fxTradeModel);
+        businessEvent = cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
-        tradeJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(trade);
-        System.out.println(tradeJson);
-        fileWriter.writeEventToFile("fxcash-product", eventDateTime, tradeJson);
-
-        rosettaObjectMapper = RosettaObjectMapper.getNewRosettaObjectMapper();
-        tradeObj = new Trade.TradeBuilderImpl();
-        newTrade = rosettaObjectMapper.readValue(tradeJson, tradeObj.getClass());
 
         //FX Option
 
         FXOptionModel fxOptionModel = inputData.setFXOptionData();
         product = buildProduct.createFXOptionProduct(fxOptionModel);
         TradeModel fxOptionTradeModel = inputData.setFXOptionTradeData();
-        trade = createTrade.createFXOptionTrade(product, fxOptionTradeModel);
-
-        tradeJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(trade);
-        System.out.println(tradeJson);
-        fileWriter.writeEventToFile("fxoption-product", eventDateTime, tradeJson);
-
-        rosettaObjectMapper = RosettaObjectMapper.getNewRosettaObjectMapper();
-        tradeObj = new Trade.TradeBuilderImpl();
-        newTrade = rosettaObjectMapper.readValue(tradeJson, tradeObj.getClass());
+        executionInstruction = createTrade.createFXOptionTrade(product, fxOptionTradeModel);
+        businessEvent = cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
 
 
@@ -158,15 +235,9 @@ public class Main {
         IrsOtcModel irsOtcModel = inputData.setIrsOctData();
         product = buildProduct.createIrsOtcProduct(irsOtcModel);
         TradeModel irsOtcTradeModel = inputData.setIrsOtcTradeData();
-        trade = createTrade.createIrsOtcTrade(product, irsOtcTradeModel);
+        executionInstruction = createTrade.createIrsOtcTrade(product, irsOtcTradeModel);
+        businessEvent = cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
-        tradeJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(trade);
-        System.out.println(tradeJson);
-        fileWriter.writeEventToFile("irsotc-product", eventDateTime, tradeJson);
-
-        rosettaObjectMapper = RosettaObjectMapper.getNewRosettaObjectMapper();
-        tradeObj = new Trade.TradeBuilderImpl();
-        newTrade = rosettaObjectMapper.readValue(tradeJson, tradeObj.getClass());
 
     }
 

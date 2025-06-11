@@ -119,6 +119,8 @@ public class BondModel {
     }
 
     public String isin;
+    public String cusip;
+    public String series;
     public String instrumentName;
     public String effectiveDate;
     public String settlementDate;
@@ -132,5 +134,9 @@ public class BondModel {
     public String paymentFrequency;
     public String dayCountMethod;
     public String dayCountFraction;
+
+    public String[][] indexSchedule;
+    public String[][] rateSchedule;
+
 
 }

@@ -143,7 +143,7 @@ public class InputData {
     bondModel.effectiveDate = "2016-02-15T00:00:00.000+00:00";
     bondModel.maturityDate = "2046-02-15T00:00:00.000+00:00";
     bondModel.couponRate = "2.5";
-    bondModel.country = "USD";
+    bondModel.country = "US";
     bondModel.instrumentName = "UST 2.5 2/15/46";
     bondModel.currency = "USD";
     bondModel.isin = "US912810RQ31";
@@ -151,6 +151,73 @@ public class InputData {
     bondModel.dayCountMethod = "ModifiedFollowing";
     bondModel.dayCountFraction = "30/360";
     bondModel.issuer = "US Treasury";
+
+
+
+    return bondModel;
+
+  }
+
+  public BondModel setUSTipsBondData(){
+
+    BondModel bondModel = new BondModel();
+
+    bondModel.effectiveDate = "2025-04-30T00:00:00.000+00:00";
+    bondModel.maturityDate = "2030-04-15T00:00:00.000+00:00";
+    bondModel.couponRate = "1.625";
+    bondModel.country = "US";
+    bondModel.instrumentName = "USTIP 1.625 4/15/30";
+    bondModel.series = "X-2030";
+    bondModel.currency = "USD";
+    bondModel.isin = "";
+    bondModel.cusip = "91282CNB3";
+    bondModel.paymentFrequency = "SA";
+    bondModel.dayCountMethod = "ModifiedFollowing";
+    bondModel.dayCountFraction = "30/360";
+    bondModel.issuer = "US Treasury";
+    bondModel.indexSchedule = getIndexSchedule();
+
+    return bondModel;
+
+  }
+
+  public String[][] getIndexSchedule(){
+
+    String[][] cpiSchedule = new String[3][3];
+    cpiSchedule[2]= new String[]{"2025-07-31","321.4439","1.00978"};
+    cpiSchedule[1]= new String[]{"2025-07-30","321.42177","1.00971"};
+    cpiSchedule[0]= new String[]{"2025-07-29","321.40016","1.00965"};
+
+    return cpiSchedule;
+
+  }
+
+  public String[][] getRateSchedule(){
+
+    String[][] rateSchedule = new String[3][3];
+    rateSchedule[2]= new String[]{"2025-06-10","1.625"};
+    rateSchedule[1]= new String[]{"2025-06-09","1.623"};
+    rateSchedule[0]= new String[]{"2025-06-06","1.619"};
+
+    return rateSchedule;
+
+  }
+
+  public BondModel setMuniBondData(){
+
+    BondModel bondModel = new BondModel();
+
+    bondModel.effectiveDate = "2016-02-15T00:00:00.000+00:00";
+    bondModel.maturityDate = "2046-02-15T00:00:00.000+00:00";
+    bondModel.couponRate = "5.0";
+    bondModel.country = "US";
+    bondModel.instrumentName = "New York New York City Municipal Water Finance Second General Resolution Series Ff";
+    bondModel.currency = "USD";
+    bondModel.isin = "64972GFS8";
+    bondModel.paymentFrequency = "SA";
+    bondModel.dayCountMethod = "ModifiedFollowing";
+    bondModel.dayCountFraction = "30/360";
+    bondModel.issuer = "NEW YORK CITY MUNICIPAL WATER FINANCE AUTHORITY";
 
 
 

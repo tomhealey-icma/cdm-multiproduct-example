@@ -55,4 +55,14 @@ public class CdmDates {
 
     return date;
   }
+
+  public Date createCurrentDate(){
+
+    DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
+    ZonedDateTime zDate = ZonedDateTime.now();
+    Date date= Date.of(zDate.getYear(), zDate.getMonthValue(), zDate.getDayOfMonth());
+
+
+    return date;
+  }
 }
