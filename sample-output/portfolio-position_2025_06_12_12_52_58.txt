@@ -1,0 +1,177 @@
+{
+  "portfolioState" : {
+    "positions" : [ {
+      "priceQuantity" : [ {
+        "price" : [ {
+          "value" : {
+            "value" : 99.8,
+            "unit" : {
+              "currency" : {
+                "value" : "USD"
+              }
+            },
+            "perUnitOf" : {
+              "currency" : {
+                "value" : "USD"
+              }
+            },
+            "priceType" : "AssetPrice",
+            "priceExpression" : "ParValueFraction",
+            "composite" : {
+              "baseValue" : 99.8,
+              "operand" : 0.0213,
+              "arithmeticOperator" : "Add",
+              "operandType" : "AccruedInterest"
+            }
+          }
+        } ],
+        "quantity" : [ {
+          "value" : {
+            "value" : 10000000,
+            "unit" : {
+              "currency" : {
+                "value" : "USD"
+              }
+            }
+          }
+        } ],
+        "observable" : {
+          "value" : {
+            "Asset" : {
+              "Instrument" : {
+                "Security" : {
+                  "identifier" : [ {
+                    "identifier" : {
+                      "value" : "US912810RQ31"
+                    },
+                    "identifierType" : "ISIN"
+                  }, {
+                    "identifier" : {
+                      "value" : "UST 2.5 2/15/46"
+                    },
+                    "identifierType" : "Name"
+                  } ]
+                }
+              }
+            }
+          }
+        }
+      }, {
+        "price" : [ {
+          "value" : {
+            "value" : 20.45,
+            "cashPrice" : {
+              "cashPriceType" : "Fee"
+            }
+          }
+        } ]
+      } ],
+      "product" : {
+        "NonTransferableProduct" : {
+          "identifier" : [ {
+            "identifier" : {
+              "value" : "US Treasury"
+            },
+            "source" : "Name"
+          }, {
+            "identifier" : {
+              "value" : "US912810RQ31"
+            },
+            "source" : "ISIN"
+          }, {
+            "identifier" : {
+              "value" : "UST 2.5 2/15/46"
+            },
+            "source" : "Name"
+          } ],
+          "economicTerms" : {
+            "effectiveDate" : {
+              "adjustableDate" : {
+                "adjustedDate" : {
+                  "value" : "2016-02-15"
+                }
+              }
+            },
+            "terminationDate" : {
+              "adjustableDate" : {
+                "adjustedDate" : {
+                  "value" : "2046-02-15"
+                }
+              }
+            },
+            "payout" : [ {
+              "SettlementPayout" : {
+                "payerReceiver" : {
+                  "payer" : "Party1",
+                  "receiver" : "Party2"
+                },
+                "priceQuantity" : {
+                  "quantitySchedule" : {
+                    "address" : {
+                      "scope" : "DOCUMENT",
+                      "value" : "quantity-1"
+                    }
+                  },
+                  "priceSchedule" : [ {
+                    "address" : {
+                      "scope" : "DOCUMENT",
+                      "value" : "price-1"
+                    }
+                  } ],
+                  "meta" : {
+                    "globalKey" : "0"
+                  }
+                },
+                "underlier" : {
+                  "Product" : {
+                    "TransferableProduct" : {
+                      "Instrument" : {
+                        "Security" : {
+                          "identifier" : [ {
+                            "identifier" : {
+                              "value" : "US912810RQ31"
+                            },
+                            "identifierType" : "ISIN"
+                          } ]
+                        }
+                      },
+                      "economicTerms" : {
+                        "payout" : [ {
+                          "InterestRatePayout" : {
+                            "rateSpecification" : {
+                              "FixedRateSpecification" : {
+                                "rateSchedule" : {
+                                  "price" : {
+                                    "value" : {
+                                      "value" : 2.5
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "dayCountFraction" : {
+                              "value" : "30/360"
+                            },
+                            "paymentDates" : {
+                              "paymentFrequency" : {
+                                "periodMultiplier" : 6,
+                                "period" : "M"
+                              }
+                            }
+                          }
+                        } ]
+                      }
+                    }
+                  }
+                }
+              },
+              "meta" : {
+                "globalKey" : "a314fba4"
+              }
+            } ]
+          }
+        }
+      }
+    } ]
+  }
+}

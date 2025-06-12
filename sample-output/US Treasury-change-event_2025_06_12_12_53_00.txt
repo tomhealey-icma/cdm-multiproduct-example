@@ -1,0 +1,567 @@
+{
+  "eventDate" : "2025-06-12",
+  "effectiveDate" : "2025-06-12",
+  "instruction" : [ {
+    "primitiveInstruction" : {
+      "quantityChange" : {
+        "change" : [ {
+          "quantity" : [ {
+            "value" : {
+              "value" : 10000000,
+              "unit" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              }
+            }
+          } ]
+        } ],
+        "direction" : "Replace",
+        "lotIdentifier" : [ {
+          "assignedIdentifier" : [ {
+            "identifier" : {
+              "value" : "LOT-0"
+            }
+          } ]
+        } ]
+      }
+    },
+    "before" : {
+      "value" : {
+        "trade" : {
+          "product" : {
+            "identifier" : [ {
+              "identifier" : {
+                "value" : "US Treasury"
+              },
+              "source" : "Name"
+            }, {
+              "identifier" : {
+                "value" : "US912810RQ31"
+              },
+              "source" : "ISIN"
+            }, {
+              "identifier" : {
+                "value" : "UST 2.5 2/15/46"
+              },
+              "source" : "Name"
+            } ],
+            "economicTerms" : {
+              "effectiveDate" : {
+                "adjustableDate" : {
+                  "adjustedDate" : {
+                    "value" : "2016-02-15"
+                  }
+                }
+              },
+              "terminationDate" : {
+                "adjustableDate" : {
+                  "adjustedDate" : {
+                    "value" : "2046-02-15"
+                  }
+                }
+              },
+              "payout" : [ {
+                "SettlementPayout" : {
+                  "payerReceiver" : {
+                    "payer" : "Party1",
+                    "receiver" : "Party2"
+                  },
+                  "priceQuantity" : {
+                    "quantitySchedule" : {
+                      "address" : {
+                        "scope" : "DOCUMENT",
+                        "value" : "quantity-1"
+                      }
+                    },
+                    "priceSchedule" : [ {
+                      "address" : {
+                        "scope" : "DOCUMENT",
+                        "value" : "price-1"
+                      }
+                    } ],
+                    "meta" : {
+                      "globalKey" : "0"
+                    }
+                  },
+                  "underlier" : {
+                    "Product" : {
+                      "TransferableProduct" : {
+                        "Instrument" : {
+                          "Security" : {
+                            "identifier" : [ {
+                              "identifier" : {
+                                "value" : "US912810RQ31"
+                              },
+                              "identifierType" : "ISIN"
+                            } ]
+                          }
+                        },
+                        "economicTerms" : {
+                          "payout" : [ {
+                            "InterestRatePayout" : {
+                              "rateSpecification" : {
+                                "FixedRateSpecification" : {
+                                  "rateSchedule" : {
+                                    "price" : {
+                                      "value" : {
+                                        "value" : 2.5
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "dayCountFraction" : {
+                                "value" : "30/360"
+                              },
+                              "paymentDates" : {
+                                "paymentFrequency" : {
+                                  "periodMultiplier" : 6,
+                                  "period" : "M"
+                                }
+                              }
+                            }
+                          } ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "meta" : {
+                  "globalKey" : "a314fba4"
+                }
+              } ]
+            }
+          },
+          "tradeLot" : [ {
+            "lotIdentifier" : [ {
+              "assignedIdentifier" : [ {
+                "identifier" : {
+                  "value" : "LOT-0"
+                }
+              } ]
+            } ],
+            "priceQuantity" : [ {
+              "price" : [ {
+                "value" : {
+                  "value" : 99.8,
+                  "unit" : {
+                    "currency" : {
+                      "value" : "USD"
+                    }
+                  },
+                  "perUnitOf" : {
+                    "currency" : {
+                      "value" : "USD"
+                    }
+                  },
+                  "priceType" : "AssetPrice",
+                  "priceExpression" : "ParValueFraction",
+                  "composite" : {
+                    "baseValue" : 99.8,
+                    "operand" : 0.0213,
+                    "arithmeticOperator" : "Add",
+                    "operandType" : "AccruedInterest"
+                  }
+                }
+              } ],
+              "quantity" : [ {
+                "value" : {
+                  "value" : 500000.0,
+                  "unit" : {
+                    "currency" : {
+                      "value" : "USD"
+                    }
+                  }
+                }
+              } ],
+              "observable" : {
+                "value" : {
+                  "Asset" : {
+                    "Instrument" : {
+                      "Security" : {
+                        "identifier" : [ {
+                          "identifier" : {
+                            "value" : "US912810RQ31"
+                          },
+                          "identifierType" : "ISIN"
+                        }, {
+                          "identifier" : {
+                            "value" : "UST 2.5 2/15/46"
+                          },
+                          "identifierType" : "Name"
+                        } ]
+                      }
+                    }
+                  }
+                }
+              }
+            }, {
+              "price" : [ {
+                "value" : {
+                  "value" : 20.45,
+                  "cashPrice" : {
+                    "cashPriceType" : "Fee"
+                  }
+                }
+              } ]
+            } ]
+          } ],
+          "counterparty" : [ {
+            "role" : "Party1",
+            "partyReference" : {
+              "externalReference" : "Client"
+            }
+          }, {
+            "role" : "Party2",
+            "partyReference" : {
+              "externalReference" : "Dealer"
+            }
+          } ],
+          "tradeIdentifier" : [ {
+            "assignedIdentifier" : [ {
+              "identifier" : {
+                "value" : "UTI123"
+              }
+            } ],
+            "identifierType" : "UniqueTransactionIdentifier"
+          } ],
+          "tradeDate" : {
+            "value" : "2025-02-27"
+          },
+          "party" : [ {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "ClientId"
+              }
+            } ]
+          }, {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "DealerId"
+              }
+            } ]
+          }, {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "Trader"
+              }
+            } ]
+          } ],
+          "partyRole" : [ {
+            "partyReference" : {
+              "value" : {
+                "partyId" : [ {
+                  "identifier" : {
+                    "value" : "ClientId"
+                  }
+                } ]
+              }
+            },
+            "role" : "Buyer"
+          }, {
+            "partyReference" : {
+              "value" : {
+                "partyId" : [ {
+                  "identifier" : {
+                    "value" : "DealerId"
+                  }
+                } ]
+              }
+            },
+            "role" : "Seller"
+          }, {
+            "partyReference" : {
+              "value" : {
+                "partyId" : [ {
+                  "identifier" : {
+                    "value" : "Trader"
+                  }
+                } ]
+              }
+            },
+            "role" : "BookingParty"
+          } ],
+          "executionDetails" : {
+            "executionVenue" : {
+              "entityId" : [ {
+                "value" : "BCF"
+              }, {
+                "value" : "Bloomberg"
+              } ]
+            }
+          }
+        },
+        "state" : {
+          "positionState" : "Executed"
+        }
+      }
+    }
+  } ],
+  "after" : [ {
+    "trade" : {
+      "product" : {
+        "identifier" : [ {
+          "identifier" : {
+            "value" : "US Treasury"
+          },
+          "source" : "Name"
+        }, {
+          "identifier" : {
+            "value" : "US912810RQ31"
+          },
+          "source" : "ISIN"
+        }, {
+          "identifier" : {
+            "value" : "UST 2.5 2/15/46"
+          },
+          "source" : "Name"
+        } ],
+        "economicTerms" : {
+          "effectiveDate" : {
+            "adjustableDate" : {
+              "adjustedDate" : {
+                "value" : "2016-02-15"
+              }
+            }
+          },
+          "terminationDate" : {
+            "adjustableDate" : {
+              "adjustedDate" : {
+                "value" : "2046-02-15"
+              }
+            }
+          },
+          "payout" : [ {
+            "SettlementPayout" : {
+              "payerReceiver" : {
+                "payer" : "Party1",
+                "receiver" : "Party2"
+              },
+              "priceQuantity" : {
+                "quantitySchedule" : {
+                  "address" : {
+                    "scope" : "DOCUMENT",
+                    "value" : "quantity-1"
+                  }
+                },
+                "priceSchedule" : [ {
+                  "address" : {
+                    "scope" : "DOCUMENT",
+                    "value" : "price-1"
+                  }
+                } ],
+                "meta" : {
+                  "globalKey" : "0"
+                }
+              },
+              "underlier" : {
+                "Product" : {
+                  "TransferableProduct" : {
+                    "Instrument" : {
+                      "Security" : {
+                        "identifier" : [ {
+                          "identifier" : {
+                            "value" : "US912810RQ31"
+                          },
+                          "identifierType" : "ISIN"
+                        } ]
+                      }
+                    },
+                    "economicTerms" : {
+                      "payout" : [ {
+                        "InterestRatePayout" : {
+                          "rateSpecification" : {
+                            "FixedRateSpecification" : {
+                              "rateSchedule" : {
+                                "price" : {
+                                  "value" : {
+                                    "value" : 2.5
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "dayCountFraction" : {
+                            "value" : "30/360"
+                          },
+                          "paymentDates" : {
+                            "paymentFrequency" : {
+                              "periodMultiplier" : 6,
+                              "period" : "M"
+                            }
+                          }
+                        }
+                      } ]
+                    }
+                  }
+                }
+              }
+            },
+            "meta" : {
+              "globalKey" : "a314fba4"
+            }
+          } ]
+        }
+      },
+      "tradeLot" : [ {
+        "lotIdentifier" : [ {
+          "assignedIdentifier" : [ {
+            "identifier" : {
+              "value" : "LOT-0"
+            }
+          } ]
+        } ],
+        "priceQuantity" : [ {
+          "price" : [ {
+            "value" : {
+              "value" : 99.8,
+              "unit" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              },
+              "perUnitOf" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              },
+              "priceType" : "AssetPrice",
+              "priceExpression" : "ParValueFraction",
+              "composite" : {
+                "baseValue" : 99.8,
+                "operand" : 0.0213,
+                "arithmeticOperator" : "Add",
+                "operandType" : "AccruedInterest"
+              }
+            }
+          } ],
+          "quantity" : [ {
+            "value" : {
+              "value" : 10000000,
+              "unit" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              }
+            }
+          } ],
+          "observable" : {
+            "value" : {
+              "Asset" : {
+                "Instrument" : {
+                  "Security" : {
+                    "identifier" : [ {
+                      "identifier" : {
+                        "value" : "US912810RQ31"
+                      },
+                      "identifierType" : "ISIN"
+                    }, {
+                      "identifier" : {
+                        "value" : "UST 2.5 2/15/46"
+                      },
+                      "identifierType" : "Name"
+                    } ]
+                  }
+                }
+              }
+            }
+          }
+        }, {
+          "price" : [ {
+            "value" : {
+              "value" : 20.45,
+              "cashPrice" : {
+                "cashPriceType" : "Fee"
+              }
+            }
+          } ]
+        } ]
+      } ],
+      "counterparty" : [ {
+        "role" : "Party1",
+        "partyReference" : {
+          "externalReference" : "Client"
+        }
+      }, {
+        "role" : "Party2",
+        "partyReference" : {
+          "externalReference" : "Dealer"
+        }
+      } ],
+      "tradeIdentifier" : [ {
+        "assignedIdentifier" : [ {
+          "identifier" : {
+            "value" : "UTI123"
+          }
+        } ],
+        "identifierType" : "UniqueTransactionIdentifier"
+      } ],
+      "tradeDate" : {
+        "value" : "2025-02-27"
+      },
+      "party" : [ {
+        "partyId" : [ {
+          "identifier" : {
+            "value" : "ClientId"
+          }
+        } ]
+      }, {
+        "partyId" : [ {
+          "identifier" : {
+            "value" : "DealerId"
+          }
+        } ]
+      }, {
+        "partyId" : [ {
+          "identifier" : {
+            "value" : "Trader"
+          }
+        } ]
+      } ],
+      "partyRole" : [ {
+        "partyReference" : {
+          "value" : {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "ClientId"
+              }
+            } ]
+          }
+        },
+        "role" : "Buyer"
+      }, {
+        "partyReference" : {
+          "value" : {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "DealerId"
+              }
+            } ]
+          }
+        },
+        "role" : "Seller"
+      }, {
+        "partyReference" : {
+          "value" : {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "Trader"
+              }
+            } ]
+          }
+        },
+        "role" : "BookingParty"
+      } ],
+      "executionDetails" : {
+        "executionVenue" : {
+          "entityId" : [ {
+            "value" : "BCF"
+          }, {
+            "value" : "Bloomberg"
+          } ]
+        }
+      }
+    }
+  } ]
+}

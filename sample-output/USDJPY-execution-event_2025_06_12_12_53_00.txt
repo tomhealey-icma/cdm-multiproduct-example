@@ -1,0 +1,349 @@
+{
+  "eventDate" : "2025-05-18",
+  "effectiveDate" : "2025-05-18",
+  "instruction" : [ {
+    "primitiveInstruction" : {
+      "execution" : {
+        "product" : {
+          "identifier" : [ {
+            "identifier" : {
+              "value" : "USDJPY"
+            },
+            "source" : "Name"
+          } ],
+          "economicTerms" : {
+            "effectiveDate" : {
+              "adjustableDate" : {
+                "adjustedDate" : {
+                  "value" : "2025-05-20"
+                }
+              }
+            },
+            "terminationDate" : {
+              "adjustableDate" : {
+                "adjustedDate" : {
+                  "value" : "2025-05-20"
+                }
+              }
+            },
+            "payout" : [ {
+              "SettlementPayout" : {
+                "payerReceiver" : {
+                  "payer" : "Party2",
+                  "receiver" : "Party1"
+                },
+                "underlier" : {
+                  "Product" : {
+                    "TransferableProduct" : {
+                      "Cash" : {
+                        "identifier" : [ {
+                          "identifier" : {
+                            "value" : "JPY"
+                          },
+                          "identifierType" : "CurrencyCode"
+                        } ]
+                      }
+                    }
+                  }
+                }
+              }
+            } ]
+          }
+        },
+        "priceQuantity" : [ {
+          "price" : [ {
+            "value" : {
+              "value" : 145.5,
+              "unit" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              },
+              "perUnitOf" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              },
+              "priceType" : "AssetPrice",
+              "priceExpression" : "AbsoluteTerms",
+              "composite" : {
+                "baseValue" : 145.5,
+                "operand" : 0.0213,
+                "arithmeticOperator" : "Add",
+                "operandType" : "AccruedInterest"
+              }
+            }
+          } ],
+          "quantity" : [ {
+            "value" : {
+              "value" : 5000000.0,
+              "unit" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              }
+            }
+          } ],
+          "observable" : {
+            "value" : {
+              "Asset" : {
+                "Cash" : {
+                  "identifier" : [ {
+                    "identifier" : {
+                      "value" : "USD"
+                    },
+                    "identifierType" : "CurrencyCode"
+                  } ]
+                }
+              }
+            }
+          },
+          "meta" : {
+            "globalKey" : "a314fba4"
+          }
+        } ],
+        "counterparty" : [ {
+          "role" : "Party1",
+          "partyReference" : {
+            "externalReference" : "Client"
+          }
+        }, {
+          "role" : "Party2",
+          "partyReference" : {
+            "externalReference" : "Dealer"
+          }
+        } ],
+        "parties" : [ {
+          "partyId" : [ {
+            "identifier" : {
+              "value" : "ClientId"
+            }
+          } ]
+        }, {
+          "partyId" : [ {
+            "identifier" : {
+              "value" : "DealerId"
+            }
+          } ]
+        }, {
+          "partyId" : [ {
+            "identifier" : {
+              "value" : "Trader"
+            }
+          } ]
+        } ],
+        "partyRoles" : [ {
+          "partyReference" : {
+            "value" : {
+              "partyId" : [ {
+                "identifier" : {
+                  "value" : "ClientId"
+                }
+              } ]
+            }
+          },
+          "role" : "Buyer"
+        }, {
+          "partyReference" : {
+            "value" : {
+              "partyId" : [ {
+                "identifier" : {
+                  "value" : "DealerId"
+                }
+              } ]
+            }
+          },
+          "role" : "Seller"
+        }, {
+          "partyReference" : {
+            "value" : {
+              "partyId" : [ {
+                "identifier" : {
+                  "value" : "Trader"
+                }
+              } ]
+            }
+          },
+          "role" : "BookingParty"
+        } ],
+        "tradeDate" : {
+          "value" : "2025-05-18"
+        }
+      }
+    }
+  } ],
+  "after" : [ {
+    "trade" : {
+      "product" : {
+        "identifier" : [ {
+          "identifier" : {
+            "value" : "USDJPY"
+          },
+          "source" : "Name"
+        } ],
+        "economicTerms" : {
+          "effectiveDate" : {
+            "adjustableDate" : {
+              "adjustedDate" : {
+                "value" : "2025-05-20"
+              }
+            }
+          },
+          "terminationDate" : {
+            "adjustableDate" : {
+              "adjustedDate" : {
+                "value" : "2025-05-20"
+              }
+            }
+          },
+          "payout" : [ {
+            "SettlementPayout" : {
+              "payerReceiver" : {
+                "payer" : "Party2",
+                "receiver" : "Party1"
+              },
+              "underlier" : {
+                "Product" : {
+                  "TransferableProduct" : {
+                    "Cash" : {
+                      "identifier" : [ {
+                        "identifier" : {
+                          "value" : "JPY"
+                        },
+                        "identifierType" : "CurrencyCode"
+                      } ]
+                    }
+                  }
+                }
+              }
+            }
+          } ]
+        }
+      },
+      "tradeLot" : [ {
+        "priceQuantity" : [ {
+          "price" : [ {
+            "value" : {
+              "value" : 145.5,
+              "unit" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              },
+              "perUnitOf" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              },
+              "priceType" : "AssetPrice",
+              "priceExpression" : "AbsoluteTerms",
+              "composite" : {
+                "baseValue" : 145.5,
+                "operand" : 0.0213,
+                "arithmeticOperator" : "Add",
+                "operandType" : "AccruedInterest"
+              }
+            }
+          } ],
+          "quantity" : [ {
+            "value" : {
+              "value" : 5000000.0,
+              "unit" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              }
+            }
+          } ],
+          "observable" : {
+            "value" : {
+              "Asset" : {
+                "Cash" : {
+                  "identifier" : [ {
+                    "identifier" : {
+                      "value" : "USD"
+                    },
+                    "identifierType" : "CurrencyCode"
+                  } ]
+                }
+              }
+            }
+          },
+          "meta" : {
+            "globalKey" : "a314fba4"
+          }
+        } ]
+      } ],
+      "counterparty" : [ {
+        "role" : "Party1",
+        "partyReference" : {
+          "externalReference" : "Client"
+        }
+      }, {
+        "role" : "Party2",
+        "partyReference" : {
+          "externalReference" : "Dealer"
+        }
+      } ],
+      "tradeDate" : {
+        "value" : "2025-05-18"
+      },
+      "party" : [ {
+        "partyId" : [ {
+          "identifier" : {
+            "value" : "ClientId"
+          }
+        } ]
+      }, {
+        "partyId" : [ {
+          "identifier" : {
+            "value" : "DealerId"
+          }
+        } ]
+      }, {
+        "partyId" : [ {
+          "identifier" : {
+            "value" : "Trader"
+          }
+        } ]
+      } ],
+      "partyRole" : [ {
+        "partyReference" : {
+          "value" : {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "ClientId"
+              }
+            } ]
+          }
+        },
+        "role" : "Buyer"
+      }, {
+        "partyReference" : {
+          "value" : {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "DealerId"
+              }
+            } ]
+          }
+        },
+        "role" : "Seller"
+      }, {
+        "partyReference" : {
+          "value" : {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "Trader"
+              }
+            } ]
+          }
+        },
+        "role" : "BookingParty"
+      } ]
+    },
+    "state" : {
+      "positionState" : "Executed"
+    }
+  } ]
+}
