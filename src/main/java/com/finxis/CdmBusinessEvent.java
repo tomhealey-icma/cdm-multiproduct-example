@@ -14,6 +14,7 @@ import com.regnosys.rosetta.common.serialisation.RosettaObjectMapper;
 import com.rosetta.model.lib.records.Date;
 import org.finos.cdm.CdmRuntimeModule;
 
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,7 +29,8 @@ public class CdmBusinessEvent {
 
     //Create a primitive execution instruction
     PrimitiveInstruction primitiveInstruction = PrimitiveInstruction.builder()
-            .setExecution(executionInstruction);
+            .setExecution(executionInstruction)
+            .build();
 
     Date effectiveDate = executionInstruction.getTradeDate().getValue();
     Date eventDate = executionInstruction.getTradeDate().getValue();
@@ -67,8 +69,6 @@ public class CdmBusinessEvent {
     FileWriter fileWriter = new FileWriter();
 
     //Create a primitive  instruction
-    PrimitiveInstruction primitiveInstruction = PrimitiveInstruction.builder()
-            .setQuantityChange(quantityChangeInstruction);
 
     Date effectiveDate = new CdmDates().createCurrentDate();
     Date eventDate = new CdmDates().createCurrentDate();
@@ -77,12 +77,18 @@ public class CdmBusinessEvent {
     injector.injectMembers(change);
     TradeState tradeState = change.evaluate(quantityChangeInstruction,originalTradeState);
 
+
+    PrimitiveInstruction primitiveInstruction = PrimitiveInstruction.builder()
+            .setQuantityChange(quantityChangeInstruction)
+            .build();
+
     //Create an instruction from primitive. Before state is null
     Instruction instruction = Instruction.builder()
             .setPrimitiveInstruction(primitiveInstruction)
             .setBefore(ReferenceWithMetaTradeState.builder()
                     .setValue(originalTradeState))
             .build();
+    
 
     List<Instruction> instructionList = List.of(instruction);
 
@@ -137,7 +143,7 @@ public class CdmBusinessEvent {
 
     String businessEventJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(businessEvent);
     System.out.println(businessEventJson);
-    fileWriter.writeEventToFile(tradeState.getTrade().getProduct().getIdentifier().get(0).getIdentifier().getValue()+"-change-event", eventDateTime, businessEventJson);
+    fileWriter.writeEventToFile(tradeState.getTrade().getProduct().getIdentifier().get(0).getIdentifier().getValue()+"-transfer-event", eventDateTime, businessEventJson);
 
     return businessEvent;
 

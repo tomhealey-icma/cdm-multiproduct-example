@@ -10,6 +10,7 @@ import cdm.base.math.UnitType;
 import cdm.base.math.metafields.FieldWithMetaNonNegativeQuantitySchedule;
 import cdm.base.staticdata.asset.common.*;
 import cdm.base.staticdata.identifier.AssignedIdentifier;
+import cdm.base.staticdata.identifier.Identifier;
 import cdm.base.staticdata.identifier.TradeIdentifierTypeEnum;
 import cdm.base.staticdata.party.*;
 import cdm.base.staticdata.party.metafields.ReferenceWithMetaParty;
@@ -28,9 +29,11 @@ import com.finxis.models.BondModel;
 import com.finxis.models.TradeModel;
 import com.finxis.util.CdmDates;
 import com.finxis.CdmBusinessEvent.*;
+import com.rosetta.model.lib.meta.Key;
 import com.rosetta.model.lib.records.Date;
 import com.rosetta.model.metafields.FieldWithMetaDate;
 import com.rosetta.model.metafields.FieldWithMetaString;
+import com.rosetta.model.metafields.MetaFields;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -141,7 +144,6 @@ public class CreateTrade {
             .addTradeIdentifier(trade.getTradeIdentifier())
             .build();
 
-    cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
     return executionInstruction;
 
@@ -249,9 +251,6 @@ public class CreateTrade {
             .addTradeIdentifier(trade.getTradeIdentifier())
             .build();
 
-    cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
-
-
     return executionInstruction;
   }
 
@@ -331,18 +330,32 @@ public class CreateTrade {
                                                     .setOperand(BigDecimal.valueOf(Double.parseDouble(".0213")))
                                                     .setArithmeticOperator(ArithmeticOperationEnum.ADD)
                                                     .setOperandType(PriceOperandEnum.ACCRUED_INTEREST)))))
+                            .setMeta(MetaFields.builder()
+                                    .setKey(List.of(Key.builder()
+                                            .setScope("DOCUMENT")
+                                            .setKeyValue("price-1"))))
                             .setQuantity(List.of(FieldWithMetaNonNegativeQuantitySchedule.builder()
                                     .setValue(NonNegativeQuantitySchedule.builder()
                                             .setValue(BigDecimal.valueOf(Double.parseDouble(fxTradeModel.quantity)))
                                             .setUnit(UnitType.builder()
                                                     .setCurrencyValue(fxTradeModel.priceCurrency)))))
+                                    .setMeta(MetaFields.builder()
+                                            .setKey(List.of(Key.builder()
+                                                            .setScope("DOCUMENT")
+                                                            .setKeyValue("quantity-1"))))
                             .setObservable(FieldWithMetaObservable.builder()
                                     .setValue(Observable.builder()
                                             .setAsset(Asset.builder()
                                                     .setCash(Cash.builder()
                                                             .setIdentifier(List.of(AssetIdentifier.builder()
                                                                     .setIdentifierType(AssetIdTypeEnum.CURRENCY_CODE)
-                                                                    .setIdentifierValue(fxTradeModel.priceCurrency)))))))))))
+                                                                    .setIdentifierValue(fxTradeModel.priceCurrency)))))))
+                            .setMeta(MetaFields.builder()
+                                    .setKey(List.of(Key.builder()
+                                            .setScope("DOCUMENT")
+                                            .setKeyValue("observerable-1"))))
+                            .setMeta(MetaFields.builder()
+                                    .setGlobalKey("a314fba4"))))))
 
             .build();
 
@@ -357,7 +370,6 @@ public class CreateTrade {
             .addTradeIdentifier(trade.getTradeIdentifier())
             .build();
 
-    cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
     return executionInstruction;
 
@@ -431,7 +443,10 @@ public class CreateTrade {
                     .setAssignedIdentifier(List.of(AssignedIdentifier.builder()
                             .setIdentifierValue("UTI123")))))
             .setTradeLot(List.of(TradeLot.builder()
-                    .setPriceQuantity(List.of(PriceQuantity.builder()
+                        .setLotIdentifier(List.of(Identifier.builder()
+                                    .setAssignedIdentifier(List.of(AssignedIdentifier.builder()
+                                            .setIdentifierValue("LOT-0")))))
+                        .setPriceQuantity(List.of(PriceQuantity.builder()
                             .setPrice(List.of(FieldWithMetaPriceSchedule.builder()
                                     .setValue(PriceSchedule.builder()
                                             .setValue(BigDecimal.valueOf(Double.parseDouble(price)))
@@ -497,9 +512,11 @@ public class CreateTrade {
             .setExecutionDetails(trade.getExecutionDetails())
             .setTradeDate(trade.getTradeDate())
             .addTradeIdentifier(trade.getTradeIdentifier())
+            .setLotIdentifier(Identifier.builder()
+                    .setAssignedIdentifier(List.of(AssignedIdentifier.builder()
+                            .setIdentifierValue("LOT-0"))))
             .build();
 
-    cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
     return executionInstruction;
   }
@@ -614,7 +631,6 @@ public class CreateTrade {
             .addTradeIdentifier(trade.getTradeIdentifier())
             .build();
 
-    cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
 
     return executionInstruction;
   }

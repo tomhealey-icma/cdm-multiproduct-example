@@ -5,6 +5,7 @@ import cdm.base.datetime.daycount.DayCountFractionEnum;
 import cdm.base.datetime.daycount.metafields.FieldWithMetaDayCountFractionEnum;
 import cdm.base.datetime.metafields.FieldWithMetaBusinessCenterEnum;
 import cdm.base.datetime.metafields.ReferenceWithMetaBusinessCenters;
+import cdm.base.math.QuantitySchedule;
 import cdm.base.math.UnitType;
 import cdm.base.math.metafields.ReferenceWithMetaNonNegativeQuantitySchedule;
 import cdm.base.staticdata.asset.common.*;
@@ -33,6 +34,7 @@ import com.rosetta.model.metafields.FieldWithMetaDate;
 import com.rosetta.model.metafields.FieldWithMetaString;
 import com.finxis.product.BuildProduct.*;
 import com.finxis.util.CdmDates.*;
+import com.rosetta.model.metafields.MetaFields;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -272,6 +274,17 @@ public class BuildProduct {
                                             .setPayerReceiver(PayerReceiver.builder()
                                                     .setPayer(CounterpartyRoleEnum.PARTY_1)
                                                     .setReceiver(CounterpartyRoleEnum.PARTY_2))
+                                            .setPriceQuantity(ResolvablePriceQuantity.builder()
+                                                    .setQuantitySchedule(ReferenceWithMetaNonNegativeQuantitySchedule.builder()
+                                                            .setReference(Reference.builder()
+                                                                    .setScope("DOCUMENT")
+                                                                    .setReference("quantity-1")))
+                                                    .setPriceSchedule(List.of(ReferenceWithMetaPriceSchedule.builder()
+                                                                    .setReference(Reference.builder()
+                                                                            .setScope("DOCUMENT")
+                                                                            .setReference("price-1"))))
+                                                    .setMeta(MetaFields.builder()
+                                                            .setGlobalKey("0")))
                                             .setUnderlier(Underlier.builder()
                                                     .setProduct(Product.builder()
                                                             .setTransferableProduct(TransferableProduct.builder()
@@ -299,7 +312,103 @@ public class BuildProduct {
                                                                                                                     .setPrice(ReferenceWithMetaPriceSchedule.builder()
                                                                                                                             .setValue(PriceSchedule.builder()
                                                                                                                                     .setValue(BigDecimal.valueOf(Double.parseDouble(bondModel.couponRate)
-                                                                                                                                    ))))))))))))))))))
+                                                                                                                                    )))))))))))))))
+                                    .setMeta(MetaFields.builder()
+                                            .setGlobalKey("a314fba4"))
+                                    .setMeta(MetaFields.builder()
+                                            .setGlobalKey("a314fba4")))))
+
+            .build();
+
+    return product;
+
+  }
+
+  public Product createTIPSProduct(BondModel bondModel){
+
+    CdmDates cdmDates = new CdmDates();
+    DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz");
+
+
+    ZonedDateTime zonedMaturityDate = ZonedDateTime.parse(bondModel.maturityDate, formatter);
+    Date terminationDate = Date.of(zonedMaturityDate.getYear(), zonedMaturityDate.getMonthValue(), zonedMaturityDate.getDayOfMonth());
+
+    ZonedDateTime zonedEffectiveDate = ZonedDateTime.parse(bondModel.effectiveDate, formatter);
+    Date effectiveDate = Date.of(zonedEffectiveDate.getYear(), zonedEffectiveDate.getMonthValue(),zonedEffectiveDate.getDayOfMonth());
+
+    Product product = Product.builder()
+            .setNonTransferableProduct(NonTransferableProduct.builder()
+                    .setIdentifier(List.of(ProductIdentifier.builder()
+                            .setIdentifier(FieldWithMetaString.builder()
+                                    .setValue(bondModel.issuer))
+                            .setSource(ProductIdTypeEnum.NAME.NAME)))
+                    .addIdentifier(ProductIdentifier.builder()
+                            .setSource(ProductIdTypeEnum.ISIN)
+                            .setIdentifierValue(bondModel.getIsin()))
+                    .addIdentifier(ProductIdentifier.builder()
+                            .setIdentifier(FieldWithMetaString.builder()
+                                    .setValue(bondModel.instrumentName))
+                            .setSource(ProductIdTypeEnum.NAME.NAME))
+
+                    .setEconomicTerms(EconomicTerms.builder()
+                            .setTerminationDate(AdjustableOrRelativeDate.builder()
+                                    .setAdjustableDate(AdjustableDate.builder()
+                                            .setAdjustedDate(FieldWithMetaDate.builder()
+                                                    .setValue(terminationDate))))
+                            .setEffectiveDate(AdjustableOrRelativeDate.builder()
+                                    .setAdjustableDate(AdjustableDate.builder()
+                                            .setAdjustedDate(FieldWithMetaDate.builder()
+                                                    .setValue(effectiveDate))))
+
+                            .addPayout(Payout.builder()
+                                    .setSettlementPayout(SettlementPayout.builder()
+                                            .setPayerReceiver(PayerReceiver.builder()
+                                                    .setPayer(CounterpartyRoleEnum.PARTY_1)
+                                                    .setReceiver(CounterpartyRoleEnum.PARTY_2))
+                                            .setPriceQuantity(ResolvablePriceQuantity.builder()
+                                                    .setQuantitySchedule(ReferenceWithMetaNonNegativeQuantitySchedule.builder()
+                                                            .setReference(Reference.builder()
+                                                                    .setScope("DOCUMENT")
+                                                                    .setReference("quantity-1")))
+                                                    .setPriceSchedule(List.of(ReferenceWithMetaPriceSchedule.builder()
+                                                            .setReference(Reference.builder()
+                                                                    .setScope("DOCUMENT")
+                                                                    .setReference("price-1"))))
+                                                    .setMeta(MetaFields.builder()
+                                                            .setGlobalKey("0")))
+                                            .setUnderlier(Underlier.builder()
+                                                    .setProduct(Product.builder()
+                                                            .setTransferableProduct(TransferableProduct.builder()
+                                                                    .setInstrument(Instrument.builder()
+                                                                            .setSecurity(Security.builder()
+                                                                                    .setIdentifier(List.of(AssetIdentifier.builder()
+                                                                                            .setIdentifierValue(bondModel.getIsin())
+                                                                                            .setIdentifierType(AssetIdTypeEnum.ISIN)))))
+                                                                    .setEconomicTerms(EconomicTerms.builder()
+                                                                            .setPayout(List.of(Payout.builder()
+                                                                                    .setInterestRatePayout(InterestRatePayout.builder()
+                                                                                            .setDayCountFraction(FieldWithMetaDayCountFractionEnum.builder()
+                                                                                                    .setValue(DayCountFractionEnum._30_360))
+                                                                                            .setPaymentDates(PaymentDates.builder()
+                                                                                                    .setPaymentFrequency(Frequency.builder()
+                                                                                                            .setPeriod(PeriodExtendedEnum.M)
+                                                                                                            .setPeriodMultiplier(6)
+                                                                                                            .build())
+                                                                                                    .build())
+                                                                                            .setRateSpecification(RateSpecification.builder()
+                                                                                                    .setFixedRateSpecification(FixedRateSpecification.builder()
+                                                                                                            .setRateSchedule(RateSchedule.builder()
+                                                                                                                    .setPriceValue(PriceSchedule.builder()
+                                                                                                                            .setPriceExpression(PriceExpressionEnum.PAR_VALUE_FRACTION))
+                                                                                                                    .setPrice(ReferenceWithMetaPriceSchedule.builder()
+                                                                                                                            .setValue(PriceSchedule.builder()
+                                                                                                                                    .setValue(BigDecimal.valueOf(Double.parseDouble(bondModel.couponRate)
+                                                                                                                                    )))))))))))))))
+                                    .setMeta(MetaFields.builder()
+                                            .setGlobalKey("a314fba4"))
+                                    .setMeta(MetaFields.builder()
+                                            .setGlobalKey("a314fba4")))))
+
             .build();
 
     return product;
