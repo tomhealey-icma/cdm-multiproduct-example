@@ -1,0 +1,527 @@
+{
+  "eventDate" : "2025-02-27",
+  "effectiveDate" : "2025-02-27",
+  "instruction" : [ {
+    "primitiveInstruction" : {
+      "execution" : {
+        "product" : {
+          "identifier" : [ {
+            "identifier" : {
+              "value" : "US Treasury"
+            },
+            "source" : "Name"
+          }, {
+            "identifier" : { },
+            "source" : "ISIN"
+          }, {
+            "identifier" : {
+              "value" : "USTIP 1.625 4/15/30"
+            },
+            "source" : "Name"
+          } ],
+          "economicTerms" : {
+            "effectiveDate" : {
+              "adjustableDate" : {
+                "adjustedDate" : {
+                  "value" : "2025-04-30"
+                }
+              }
+            },
+            "terminationDate" : {
+              "adjustableDate" : {
+                "adjustedDate" : {
+                  "value" : "2030-04-15"
+                }
+              }
+            },
+            "payout" : [ {
+              "SettlementPayout" : {
+                "payerReceiver" : {
+                  "payer" : "Party1",
+                  "receiver" : "Party2"
+                },
+                "priceQuantity" : {
+                  "quantitySchedule" : {
+                    "address" : {
+                      "scope" : "DOCUMENT",
+                      "value" : "quantity-1"
+                    }
+                  },
+                  "priceSchedule" : [ {
+                    "address" : {
+                      "scope" : "DOCUMENT",
+                      "value" : "price-1"
+                    }
+                  } ],
+                  "meta" : {
+                    "globalKey" : "0"
+                  }
+                },
+                "underlier" : {
+                  "Product" : {
+                    "TransferableProduct" : {
+                      "Instrument" : {
+                        "Security" : {
+                          "identifier" : [ {
+                            "identifier" : { },
+                            "identifierType" : "ISIN"
+                          } ]
+                        }
+                      },
+                      "economicTerms" : {
+                        "payout" : [ {
+                          "InterestRatePayout" : {
+                            "rateSpecification" : {
+                              "FixedRateSpecification" : {
+                                "rateSchedule" : {
+                                  "price" : {
+                                    "value" : {
+                                      "value" : 1.625
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "dayCountFraction" : {
+                              "value" : "30/360"
+                            },
+                            "paymentDates" : {
+                              "paymentFrequency" : {
+                                "periodMultiplier" : 6,
+                                "period" : "M"
+                              }
+                            }
+                          }
+                        } ]
+                      }
+                    }
+                  }
+                }
+              },
+              "meta" : {
+                "globalKey" : "a314fba4"
+              }
+            } ]
+          }
+        },
+        "priceQuantity" : [ {
+          "price" : [ {
+            "value" : {
+              "value" : 99.8,
+              "unit" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              },
+              "perUnitOf" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              },
+              "priceType" : "AssetPrice",
+              "priceExpression" : "ParValueFraction",
+              "composite" : {
+                "baseValue" : 99.8,
+                "operand" : 0.0213,
+                "arithmeticOperator" : "Add",
+                "operandType" : "AccruedInterest"
+              }
+            }
+          } ],
+          "quantity" : [ {
+            "value" : {
+              "value" : 500000.0,
+              "unit" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              }
+            }
+          } ],
+          "observable" : {
+            "value" : {
+              "Asset" : {
+                "Instrument" : {
+                  "Security" : {
+                    "identifier" : [ {
+                      "identifier" : { },
+                      "identifierType" : "ISIN"
+                    }, {
+                      "identifier" : {
+                        "value" : "USTIP 1.625 4/15/30"
+                      },
+                      "identifierType" : "Name"
+                    } ]
+                  }
+                }
+              }
+            }
+          }
+        }, {
+          "price" : [ {
+            "value" : {
+              "value" : 20.45,
+              "cashPrice" : {
+                "cashPriceType" : "Fee"
+              }
+            }
+          } ]
+        } ],
+        "counterparty" : [ {
+          "role" : "Party1",
+          "partyReference" : {
+            "externalReference" : "Client"
+          }
+        }, {
+          "role" : "Party2",
+          "partyReference" : {
+            "externalReference" : "Dealer"
+          }
+        } ],
+        "parties" : [ {
+          "partyId" : [ {
+            "identifier" : {
+              "value" : "ClientId"
+            }
+          } ]
+        }, {
+          "partyId" : [ {
+            "identifier" : {
+              "value" : "DealerId"
+            }
+          } ]
+        }, {
+          "partyId" : [ {
+            "identifier" : {
+              "value" : "Trader"
+            }
+          } ]
+        } ],
+        "partyRoles" : [ {
+          "partyReference" : {
+            "value" : {
+              "partyId" : [ {
+                "identifier" : {
+                  "value" : "ClientId"
+                }
+              } ]
+            }
+          },
+          "role" : "Buyer"
+        }, {
+          "partyReference" : {
+            "value" : {
+              "partyId" : [ {
+                "identifier" : {
+                  "value" : "DealerId"
+                }
+              } ]
+            }
+          },
+          "role" : "Seller"
+        }, {
+          "partyReference" : {
+            "value" : {
+              "partyId" : [ {
+                "identifier" : {
+                  "value" : "Trader"
+                }
+              } ]
+            }
+          },
+          "role" : "BookingParty"
+        } ],
+        "executionDetails" : {
+          "executionVenue" : {
+            "entityId" : [ {
+              "value" : "BCF"
+            }, {
+              "value" : "Bloomberg"
+            } ]
+          }
+        },
+        "tradeDate" : {
+          "value" : "2025-02-27"
+        },
+        "tradeIdentifier" : [ {
+          "assignedIdentifier" : [ {
+            "identifier" : {
+              "value" : "UTI123"
+            }
+          } ],
+          "identifierType" : "UniqueTransactionIdentifier"
+        } ],
+        "lotIdentifier" : {
+          "assignedIdentifier" : [ {
+            "identifier" : {
+              "value" : "LOT-0"
+            }
+          } ]
+        }
+      }
+    }
+  } ],
+  "after" : [ {
+    "trade" : {
+      "product" : {
+        "identifier" : [ {
+          "identifier" : {
+            "value" : "US Treasury"
+          },
+          "source" : "Name"
+        }, {
+          "identifier" : { },
+          "source" : "ISIN"
+        }, {
+          "identifier" : {
+            "value" : "USTIP 1.625 4/15/30"
+          },
+          "source" : "Name"
+        } ],
+        "economicTerms" : {
+          "effectiveDate" : {
+            "adjustableDate" : {
+              "adjustedDate" : {
+                "value" : "2025-04-30"
+              }
+            }
+          },
+          "terminationDate" : {
+            "adjustableDate" : {
+              "adjustedDate" : {
+                "value" : "2030-04-15"
+              }
+            }
+          },
+          "payout" : [ {
+            "SettlementPayout" : {
+              "payerReceiver" : {
+                "payer" : "Party1",
+                "receiver" : "Party2"
+              },
+              "priceQuantity" : {
+                "quantitySchedule" : {
+                  "address" : {
+                    "scope" : "DOCUMENT",
+                    "value" : "quantity-1"
+                  }
+                },
+                "priceSchedule" : [ {
+                  "address" : {
+                    "scope" : "DOCUMENT",
+                    "value" : "price-1"
+                  }
+                } ],
+                "meta" : {
+                  "globalKey" : "0"
+                }
+              },
+              "underlier" : {
+                "Product" : {
+                  "TransferableProduct" : {
+                    "Instrument" : {
+                      "Security" : {
+                        "identifier" : [ {
+                          "identifier" : { },
+                          "identifierType" : "ISIN"
+                        } ]
+                      }
+                    },
+                    "economicTerms" : {
+                      "payout" : [ {
+                        "InterestRatePayout" : {
+                          "rateSpecification" : {
+                            "FixedRateSpecification" : {
+                              "rateSchedule" : {
+                                "price" : {
+                                  "value" : {
+                                    "value" : 1.625
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "dayCountFraction" : {
+                            "value" : "30/360"
+                          },
+                          "paymentDates" : {
+                            "paymentFrequency" : {
+                              "periodMultiplier" : 6,
+                              "period" : "M"
+                            }
+                          }
+                        }
+                      } ]
+                    }
+                  }
+                }
+              }
+            },
+            "meta" : {
+              "globalKey" : "a314fba4"
+            }
+          } ]
+        }
+      },
+      "tradeLot" : [ {
+        "lotIdentifier" : [ {
+          "assignedIdentifier" : [ {
+            "identifier" : {
+              "value" : "LOT-0"
+            }
+          } ]
+        } ],
+        "priceQuantity" : [ {
+          "price" : [ {
+            "value" : {
+              "value" : 99.8,
+              "unit" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              },
+              "perUnitOf" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              },
+              "priceType" : "AssetPrice",
+              "priceExpression" : "ParValueFraction",
+              "composite" : {
+                "baseValue" : 99.8,
+                "operand" : 0.0213,
+                "arithmeticOperator" : "Add",
+                "operandType" : "AccruedInterest"
+              }
+            }
+          } ],
+          "quantity" : [ {
+            "value" : {
+              "value" : 500000.0,
+              "unit" : {
+                "currency" : {
+                  "value" : "USD"
+                }
+              }
+            }
+          } ],
+          "observable" : {
+            "value" : {
+              "Asset" : {
+                "Instrument" : {
+                  "Security" : {
+                    "identifier" : [ {
+                      "identifier" : { },
+                      "identifierType" : "ISIN"
+                    }, {
+                      "identifier" : {
+                        "value" : "USTIP 1.625 4/15/30"
+                      },
+                      "identifierType" : "Name"
+                    } ]
+                  }
+                }
+              }
+            }
+          }
+        }, {
+          "price" : [ {
+            "value" : {
+              "value" : 20.45,
+              "cashPrice" : {
+                "cashPriceType" : "Fee"
+              }
+            }
+          } ]
+        } ]
+      } ],
+      "counterparty" : [ {
+        "role" : "Party1",
+        "partyReference" : {
+          "externalReference" : "Client"
+        }
+      }, {
+        "role" : "Party2",
+        "partyReference" : {
+          "externalReference" : "Dealer"
+        }
+      } ],
+      "tradeIdentifier" : [ {
+        "assignedIdentifier" : [ {
+          "identifier" : {
+            "value" : "UTI123"
+          }
+        } ],
+        "identifierType" : "UniqueTransactionIdentifier"
+      } ],
+      "tradeDate" : {
+        "value" : "2025-02-27"
+      },
+      "party" : [ {
+        "partyId" : [ {
+          "identifier" : {
+            "value" : "ClientId"
+          }
+        } ]
+      }, {
+        "partyId" : [ {
+          "identifier" : {
+            "value" : "DealerId"
+          }
+        } ]
+      }, {
+        "partyId" : [ {
+          "identifier" : {
+            "value" : "Trader"
+          }
+        } ]
+      } ],
+      "partyRole" : [ {
+        "partyReference" : {
+          "value" : {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "ClientId"
+              }
+            } ]
+          }
+        },
+        "role" : "Buyer"
+      }, {
+        "partyReference" : {
+          "value" : {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "DealerId"
+              }
+            } ]
+          }
+        },
+        "role" : "Seller"
+      }, {
+        "partyReference" : {
+          "value" : {
+            "partyId" : [ {
+              "identifier" : {
+                "value" : "Trader"
+              }
+            } ]
+          }
+        },
+        "role" : "BookingParty"
+      } ],
+      "executionDetails" : {
+        "executionVenue" : {
+          "entityId" : [ {
+            "value" : "BCF"
+          }, {
+            "value" : "Bloomberg"
+          } ]
+        }
+      }
+    },
+    "state" : {
+      "positionState" : "Executed"
+    }
+  } ]
+}

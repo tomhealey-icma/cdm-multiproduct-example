@@ -27,7 +27,7 @@
         } ],
         "quantity" : [ {
           "value" : {
-            "value" : 10000000,
+            "value" : 500000.0,
             "unit" : {
               "currency" : {
                 "value" : "USD"
@@ -41,13 +41,11 @@
               "Instrument" : {
                 "Security" : {
                   "identifier" : [ {
-                    "identifier" : {
-                      "value" : "US912810RQ31"
-                    },
+                    "identifier" : { },
                     "identifierType" : "ISIN"
                   }, {
                     "identifier" : {
-                      "value" : "UST 2.5 2/15/46"
+                      "value" : "USTIP 1.625 4/15/30"
                     },
                     "identifierType" : "Name"
                   } ]
@@ -74,13 +72,11 @@
             },
             "source" : "Name"
           }, {
-            "identifier" : {
-              "value" : "US912810RQ31"
-            },
+            "identifier" : { },
             "source" : "ISIN"
           }, {
             "identifier" : {
-              "value" : "UST 2.5 2/15/46"
+              "value" : "USTIP 1.625 4/15/30"
             },
             "source" : "Name"
           } ],
@@ -88,14 +84,14 @@
             "effectiveDate" : {
               "adjustableDate" : {
                 "adjustedDate" : {
-                  "value" : "2016-02-15"
+                  "value" : "2025-04-30"
                 }
               }
             },
             "terminationDate" : {
               "adjustableDate" : {
                 "adjustedDate" : {
-                  "value" : "2046-02-15"
+                  "value" : "2030-04-15"
                 }
               }
             },
@@ -128,9 +124,7 @@
                       "Instrument" : {
                         "Security" : {
                           "identifier" : [ {
-                            "identifier" : {
-                              "value" : "US912810RQ31"
-                            },
+                            "identifier" : { },
                             "identifierType" : "ISIN"
                           } ]
                         }
@@ -143,7 +137,7 @@
                                 "rateSchedule" : {
                                   "price" : {
                                     "value" : {
-                                      "value" : 2.5
+                                      "value" : 1.625
                                     }
                                   }
                                 }
