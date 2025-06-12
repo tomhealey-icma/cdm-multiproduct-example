@@ -5,6 +5,8 @@ import cdm.base.datetime.daycount.DayCountFractionEnum;
 import cdm.base.datetime.daycount.metafields.FieldWithMetaDayCountFractionEnum;
 import cdm.base.datetime.metafields.FieldWithMetaBusinessCenterEnum;
 import cdm.base.datetime.metafields.ReferenceWithMetaBusinessCenters;
+import cdm.base.math.DatedValue;
+import cdm.base.math.NonNegativeQuantitySchedule;
 import cdm.base.math.QuantitySchedule;
 import cdm.base.math.UnitType;
 import cdm.base.math.metafields.ReferenceWithMetaNonNegativeQuantitySchedule;
@@ -22,9 +24,7 @@ import cdm.product.common.schedule.CalculationPeriodDates;
 import cdm.product.common.schedule.PayRelativeToEnum;
 import cdm.product.common.schedule.PaymentDates;
 import cdm.product.common.schedule.RateSchedule;
-import cdm.product.common.settlement.ResolvablePriceQuantity;
-import cdm.product.common.settlement.SettlementDate;
-import cdm.product.common.settlement.SettlementTerms;
+import cdm.product.common.settlement.*;
 import cdm.product.template.*;
 import com.finxis.models.*;
 import com.finxis.util.CdmDates;
@@ -403,11 +403,31 @@ public class BuildProduct {
                                                                                                                     .setPrice(ReferenceWithMetaPriceSchedule.builder()
                                                                                                                             .setValue(PriceSchedule.builder()
                                                                                                                                     .setValue(BigDecimal.valueOf(Double.parseDouble(bondModel.couponRate)
-                                                                                                                                    )))))))))))))))
-                                    .setMeta(MetaFields.builder()
-                                            .setGlobalKey("a314fba4"))
-                                    .setMeta(MetaFields.builder()
-                                            .setGlobalKey("a314fba4")))))
+                                                                                                                                    )))))))
+                                                                                            .setPriceQuantity(ResolvablePriceQuantity.builder()
+                                                                                                    .setQuantitySchedule(ReferenceWithMetaNonNegativeQuantitySchedule.builder()
+                                                                                                            .setValue(NonNegativeQuantitySchedule.builder()
+                                                                                                                    .setDatedValue(List.of(
+                                                                                                                            DatedValue.builder()
+                                                                                                                                    .setMeta(MetaFields.builder()
+                                                                                                                                            .setExternalKey("adjusted-principle-1")),
+                                                                                                                            DatedValue.builder()
+                                                                                                                                    .setMeta(MetaFields.builder()
+                                                                                                                                            .setExternalKey("adjusted-principle-2")),
+                                                                                                                            DatedValue.builder()
+                                                                                                                                    .setMeta(MetaFields.builder()
+                                                                                                                                            .setExternalKey("adjusted-principle-2"))))))))
+
+                                                                    .setMeta(MetaFields.builder()
+                                                                            .setGlobalKey("a314fba4"))
+                                                                    .setMeta(MetaFields.builder()
+                                                                            .setGlobalKey("a314fba4"))))))))
+                                            .setPrincipalPayment(PrincipalPayments.builder()
+                                                    .setFinalPayment(true)
+                                                    .setPrincipalPaymentSchedule(PrincipalPaymentSchedule.builder()
+                                                            .setFinalPrincipalPayment(PrincipalPayment.builder()
+                                                                    .setMeta(MetaFields.builder()
+                                                                            .setGlobalKey("final-principal-payment")))))))))
 
             .build();
 

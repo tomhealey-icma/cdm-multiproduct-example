@@ -21,6 +21,7 @@ import cdm.event.common.functions.Create_Execution;
 import cdm.event.position.Portfolio;
 import cdm.event.position.PortfolioState;
 import cdm.event.position.Position;
+import cdm.event.workflow.metafields.ReferenceWithMetaWorkflowStep;
 import cdm.observable.asset.*;
 import cdm.observable.asset.metafields.FieldWithMetaObservable;
 import cdm.observable.asset.metafields.FieldWithMetaPriceSchedule;
@@ -173,6 +174,10 @@ public class Main {
                 .setBusinessEvent(businessEvent)
                 .setMeta(MetaFields.builder()
                         .setGlobalKey("correction-id-1001"))
+                .setPreviousWorkflowStep(ReferenceWithMetaWorkflowStep.builder()
+                        .setReference(Reference.builder()
+                                .setReference("execution-id-1000")))
+
                 .build();
 
 
@@ -243,6 +248,49 @@ public class Main {
         fileWriter.writeEventToFile(usTreasuryModel.isin + "-transfer-workflow", eventDateTime, workFlowJson);
 
 
+        //US TIPS Example
+        //Create product and trade
+        BondModel usTipsModel = inputData.setUSTipsBondData();
+        product = buildProduct.createBondProduct(usTipsModel);
+        executionInstruction = createTrade.createBondTrade(product, usTipsModel);
+        businessEvent = cdmBusinessEvent.runExecutionBusinessEvent(executionInstruction);
+
+        workflowIdentifier = Identifier.builder()
+                .setAssignedIdentifier(List.of(AssignedIdentifier.builder()
+                        .setIdentifierValue("1000")))
+                .build();
+
+        executionWorkflowStep = WorkflowStep.builder()
+                .setEventIdentifier(List.of(workflowIdentifier))
+                .setWorkflowState(WorkflowState.builder()
+                        .setWorkflowStatus(WorkflowStatusEnum.ACCEPTED))
+                .setAction(ActionEnum.NEW)
+                .setBusinessEvent(businessEvent)
+                .setMeta(MetaFields.builder()
+                        .setGlobalKey("execution-id-1000"))
+                .build();
+
+
+
+        workflow = Workflow.builder()
+                .setSteps(List.of(executionWorkflowStep))
+                .build();
+
+        workFlowJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(workflow);
+        System.out.println(workFlowJson);
+        fileWriter.writeEventToFile(usTreasuryModel.isin + "-execution-workflow", eventDateTime, workFlowJson);
+
+        portfolio = Portfolio.builder()
+                .setPortfolioState(PortfolioState.builder()
+                        .setPositions(List.of(Position.builder()
+                                .setProduct(product)
+                                .addPriceQuantity(businessEvent.getAfter().get(0).getTrade()
+                                        .getTradeLot().get(0).getPriceQuantity()))))
+                .build();
+
+        portfolioJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(portfolio);
+        System.out.println(portfolioJson);
+        fileWriter.writeEventToFile( "portfolio-position", eventDateTime, portfolioJson);
 
 
 
