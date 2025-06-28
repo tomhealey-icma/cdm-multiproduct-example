@@ -76,6 +76,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
 public class Main {
 
     public static void main(String[] args) throws IOException {
@@ -204,6 +208,7 @@ public class Main {
         MapDifference<String, Object> difference = Maps.difference(map1, map2);
         System.out.println("Entries differing: " + difference.entriesDiffering());
 
+        assertEquals(mapper.readTree(originalTrade), mapper.readTree(correctedTrade));
 
         List<? extends PriceQuantity> priceQuantity = businessEvent.getAfter().get(0).getTrade()
                                             .getTradeLot().get(0).getPriceQuantity();
