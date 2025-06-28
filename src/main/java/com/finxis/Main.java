@@ -46,6 +46,8 @@ import com.finxis.trade.CreateTrade;
 import com.finxis.util.CdmDates;
 import com.finxis.util.FileWriter;
 import com.finxis.workflows.ExecutionWorkflow;
+import com.google.common.collect.MapDifference;
+import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.regnosys.rosetta.common.serialisation.RosettaObjectMapper;
@@ -72,6 +74,7 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
 
@@ -128,6 +131,8 @@ public class Main {
         String workFlowJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(workflow);
         System.out.println(workFlowJson);
         fileWriter.writeEventToFile(usTreasuryModel.isin + "-execution-workflow", eventDateTime, workFlowJson);
+
+        String originalTrade = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(businessEvent.getAfter().get(0).getTrade());
 
         Portfolio portfolio = Portfolio.builder()
                 .setPortfolioState(PortfolioState.builder()
@@ -188,6 +193,17 @@ public class Main {
         workFlowJson = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(workflow);
         System.out.println(workFlowJson);
         fileWriter.writeEventToFile(usTreasuryModel.isin + "-correction-workflow", eventDateTime, workFlowJson);
+
+        String correctedTrade = RosettaObjectMapper.getNewRosettaObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(businessEvent.getAfter().get(0).getTrade());
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map1 = mapper.readValue(originalTrade, Map.class);
+        Map<String, Object> map2 = mapper.readValue(correctedTrade, Map.class);
+
+        MapDifference<String, Object> difference = Maps.difference(map1, map2);
+        System.out.println("Entries differing: " + difference.entriesDiffering());
+
 
         List<? extends PriceQuantity> priceQuantity = businessEvent.getAfter().get(0).getTrade()
                                             .getTradeLot().get(0).getPriceQuantity();
